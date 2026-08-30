@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "reboot: Operation not permitted (must be root)."
+  exit 1
+fi
+
+exec runit-init 6

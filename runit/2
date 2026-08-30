@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. /etc/runit/utils/vprint
+
+vprint "Starting services..."
+
+exec runsvdir -P /etc/service

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. /etc/runit/utils/vprint
+
+vprint "Mounting filesystems..."
+
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+mount -t devpts devpts /dev/pts
+mount -t tmpfs tmpfs /run
+
+vprint "Filesystems mounted."
+vprint "Welcome to Vind Linux."

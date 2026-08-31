@@ -1,4 +1,6 @@
 #!/bin/sh
 
 # Print a message with the Vind prefix.
-printf '\033[1;36m[Vind]\033[0m \033[1;37m%s\033[0m\n' "$*"
+vprint() {
+  printf '\033[1;36m[Vind]\033[0m \033[1;37m%s\033[0m\n' "$*"
+}

@@ -11,4 +11,10 @@ mount -t devpts devpts /dev/pts
 mount -t tmpfs tmpfs /run
 
 vprint "Filesystems mounted."
+vprint "Setting hostname."
+
+if [ -f /etc/hostname ]; then
+    hostname "$(cat /etc/hostname)"
+fi
+
 vprint "Welcome to Vind Linux."

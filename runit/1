@@ -1,20 +1,31 @@
 #!/bin/sh
-
 . /etc/runit/utils/vprint
+. /etc/runit/utils/vwarn
+. /etc/runit/utils/verror
+
+vprint "Remounting root filesystem as read-write..."
+if ! mount -o remount,rw /; then
+    verror "Failed to remount root as rw. System may be unstable."
+fi
 
 vprint "Mounting filesystems..."
 
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
-mount -t devtmpfs devtmpfs /dev
-mount -t devpts devpts /dev/pts
-mount -t tmpfs tmpfs /run
+mountpoint -q /proc      || mount -t proc proc /proc
+mountpoint -q /sys       || mount -t sysfs sysfs /sys
+mountpoint -q /dev       || mount -t devtmpfs devtmpfs /dev
+mountpoint -q /dev/pts   || mount -t devpts devpts /dev/pts
+mountpoint -q /run       || mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
+
+mkdir -p /dev/shm /run/lock
+mountpoint -q /dev/shm   || mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /dev/shm
 
 vprint "Filesystems mounted."
-vprint "Setting hostname."
 
-if [ -f /etc/hostname ]; then
+vprint "Setting hostname."
+if [ -s /etc/hostname ]; then
     hostname "$(cat /etc/hostname)"
+else
+    vwarn "/etc/hostname missing or empty, skipping hostname setup."
 fi
 
 vprint "Welcome to Vind Linux."

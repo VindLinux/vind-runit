@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Print an error message with the Vind prefix.
+verror() {
+  printf '\033[1;31m[Vind]\033[0m \033[1;37m%s\033[0m\n' "$*"
+}

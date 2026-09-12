@@ -3,5 +3,3 @@
 . /etc/runit/utils/vprint
 
 vprint "Stopping services..."
-
-exec /etc/runit/3

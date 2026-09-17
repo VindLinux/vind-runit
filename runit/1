@@ -30,5 +30,3 @@ if [ -s /etc/hostname ]; then
 else
     vwarn "/etc/hostname missing or empty, skipping hostname setup."
 fi
-
-vprint "Welcome to Vind Linux."

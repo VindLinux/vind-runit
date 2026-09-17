@@ -5,3 +5,5 @@
 vprint "Starting services..."
 
 exec runsvdir -P /etc/service
+
+vprint "Welcome to Vind Linux."

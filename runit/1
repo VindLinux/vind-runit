@@ -24,6 +24,12 @@ mountpoint -q /run	|| mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
 mkdir -p /dev/shm /run/lock
 mountpoint -q /dev/shm	|| mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /dev/shm
 
+vprint "Mounting fstab filesystems..."
+mount -a || vwarn "Some fstab filesystems failed to mount."
+
+vprint "Enabling swap..."
+swapon -a || vwarn "Failed to enable swap."
+
 vprint "Filesystems mounted."
 
 vprint "Setting hostname."

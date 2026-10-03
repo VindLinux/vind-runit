@@ -9,11 +9,6 @@ mountpoint -q /proc	|| mount -t proc proc /proc
 mountpoint -q /sys	|| mount -t sysfs sysfs /sys
 mountpoint -q /dev	|| mount -t devtmpfs devtmpfs /dev
 
-vprint "Remounting root filesystem as read-write..."
-if ! mount -o remount,rw /; then
-    verror "Failed to remount root as rw. System may be unstable."
-fi
-
 vprint "Mounting filesystems..."
 
 mkdir -p /dev/pts
@@ -23,6 +18,18 @@ mountpoint -q /run	|| mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
 
 mkdir -p /dev/shm /run/lock
 mountpoint -q /dev/shm	|| mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /dev/shm
+
+# Only remount the root filesystem if it is actually read-only.
+# (Kernel command line already passes "rw" on most setups.)
+root_opts=$(awk '$2=="/" { o=$4 } END { print o }' /proc/mounts)
+case ",$root_opts," in
+    *,ro,*)
+        vprint "Remounting root filesystem as read-write..."
+        if ! mount -o remount,rw /; then
+            verror "Failed to remount root as rw. System may be unstable."
+        fi
+        ;;
+esac
 
 vprint "Mounting fstab filesystems..."
 mount -a || vwarn "Some fstab filesystems failed to mount."

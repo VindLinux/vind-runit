@@ -39,9 +39,13 @@ swapon -a || vwarn "Failed to enable swap."
 
 vprint "Filesystems mounted."
 
-vprint "Setting hostname."
+vprint "Setting hostname..."
 if [ -s /etc/hostname ]; then
     hostname "$(cat /etc/hostname)"
 else
     vwarn "/etc/hostname missing or empty, skipping hostname setup."
 fi
+
+vprint "Setting up loopback..."
+
+ip link set lo up
